@@ -32,7 +32,7 @@
   "author": "Joshua Comeau <joshwcomeau@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "favico.js": "^0.3.10",
+    "favico.js": "^0.3.10"
   },
   "devDependencies": {
     "babel": "^6.1.18",
