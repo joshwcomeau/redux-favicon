@@ -1,8 +1,14 @@
 import favicoIntegration from './favico-integration';
 
 
-export default function(favicoOptions) {
-  let favicon = favicoIntegration.create(favicoOptions)
+export default function(favicoOptions = {}) {
+  // Detect if this middleware is being used without being 'preloaded',
+  // by being passed a store instead of favicoOptions
+  if ( typeof favicoOptions.getState === 'function' ) {
+    console.error('redux-favicon middleware not preloaded! \nYou need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.\n\nSee https://github.com/joshwcomeau/redux-favico/#troubleshooting')
+  }
+
+  let favicon = favicoIntegration(favicoOptions)
 
   return store => next => action => {
     // Ignore actions that don't tweak the favico

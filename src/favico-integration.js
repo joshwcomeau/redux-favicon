@@ -4,7 +4,7 @@ const defaultFavicoOptions  = { animation: 'slide' };
 const favicoEnumValues      = [ 'increment', 'decrement', 'reset' ];
 
 
-export function create(options = defaultFavicoOptions) {
+export default function(options = defaultFavicoOptions) {
   // Create a new Favico integration.
   // Initially this was going to be a singleton object, but I realized there
   // may be cases where you want several different types of notifications.
@@ -46,7 +46,7 @@ export function create(options = defaultFavicoOptions) {
               You provided a string value: ${value}.
               The only strings we accept are: ${favicoEnumValues.join(', ')}.
               See <INSERT LINK> for more information.
-            `);
+            `;
             return callback(errorMessage);
         }
 
@@ -56,7 +56,7 @@ export function create(options = defaultFavicoOptions) {
           You provided a a value of type: ${typeof value}.
           We only accept integers or strings.
           See <INSERT LINK> for more information.
-        `);
+        `;
         return callback(errorMessage);
       }
 
