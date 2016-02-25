@@ -37,6 +37,7 @@ describe('faviconMiddleware', () => {
     next.reset();
     warnStub.reset();
     errorStub.reset();
+    favicoStub.reset();
   });
 
   describe('initialization', () => {
@@ -49,6 +50,7 @@ describe('faviconMiddleware', () => {
       faviconMiddleware(store);
 
       expect(errorStub).to.have.been.calledOnce;
+      expect(favicoStub).to.not.have.been.called;
       expect(next).to.not.have.been.called;
     });
   });
@@ -85,20 +87,22 @@ describe('faviconMiddleware', () => {
         actionHandler(action);
 
         expect(warnStub).to.have.been.calledOnce;
-        expect(next).to.have.been.calledOnce;
+        expect(warnStub.getCall(0).args[0]).to.match(/illegal type/i);
 
-        console.log(warnStub.getCall(0).args)
-        // TODO: Check the exact error message for 'illegal type'
-      })
-    })
+        expect(favicoStub).to.not.have.been.called;
+        expect(next).to.have.been.calledOnce;
+      });
+    });
 
     it('console.warns when a decimal number is provided', () => {
       const action = { name: 'INVALID', meta: { favicon: 5.4321 } };
       actionHandler(action);
 
       expect(warnStub).to.have.been.calledOnce;
+      expect(warnStub.getCall(0).args[0]).to.match(/integer/i);
+
+      expect(favicoStub).to.not.have.been.called;
       expect(next).to.have.been.calledOnce;
-      // TODO: Check the exact error message for 'integer'
     });
 
     it('console.warns when an invalid string is provided', () => {
@@ -106,8 +110,10 @@ describe('faviconMiddleware', () => {
       actionHandler(action);
 
       expect(warnStub).to.have.been.calledOnce;
+      expect(warnStub.getCall(0).args[0]).to.match(/string/i);
+
+      expect(favicoStub).to.not.have.been.called;
       expect(next).to.have.been.calledOnce;
-      // TODO: Check the exact error message for 'string'
     });
 
     it('accepts integer values', () => {
@@ -115,8 +121,10 @@ describe('faviconMiddleware', () => {
       actionHandler(action);
 
       expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(4);
       expect(next).to.have.been.calledOnce;
-      // TODO: Check the exact error message for 'string'
     });
 
     it('accepts enum string values', () => {
@@ -124,8 +132,10 @@ describe('faviconMiddleware', () => {
       actionHandler(action);
 
       expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(5);
       expect(next).to.have.been.calledOnce;
-      // TODO: Check the exact error message for 'string'
     });
 
     it('is not case-sensitive', () => {
@@ -133,8 +143,10 @@ describe('faviconMiddleware', () => {
       actionHandler(action);
 
       expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(0);
       expect(next).to.have.been.calledOnce;
-      // TODO: Check the exact error message for 'string'
     });
 
     it('forwards actions with no meta.favicon', () => {
@@ -142,6 +154,7 @@ describe('faviconMiddleware', () => {
       actionHandler(action);
 
       expect(warnStub).to.not.have.been.called;
+      expect(favicoStub).to.not.have.been.called;
       expect(next).to.have.been.calledOnce;
     });
   });

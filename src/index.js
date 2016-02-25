@@ -1,9 +1,9 @@
-const Favico = require('favico.js');
+import Favico from 'favico.js';
 
 
 // The middleware is kept as simple as possible.
 // All favicon operations are delegated to a function below.
-module.exports = function(favicoOptions = {}) {
+export default function(favicoOptions = {}) {
   // Detect if this middleware is being used without being 'preloaded',
   // by being passed a store instead of favicoOptions
   if ( typeof favicoOptions.getState === 'function' ) {
@@ -42,10 +42,6 @@ function favicoIntegration(options = defaultFavicoOptions) {
   const favico = new Favico(options);
 
   return {
-    // A secret access point, for the rare cases that the Favico instance
-    // needs to be interacted with directly.
-    __favico: favico,
-
     currentVal: 0,
 
     update(value, callback) {
