@@ -13,7 +13,14 @@ global.navigator  = {
   getUserMedia: sinon.spy()
 }
 
-import faviconMiddleware  from '../src/index';
+// Stub out the '.badge' method called from within src/index.js
+import proxyquire from 'proxyquire';
+let favicoStub = sinon.stub();
+const FakeFavico = function() {
+  this.badge = favicoStub
+}
+const faviconMiddleware = proxyquire('../src/index.js', { 'favico.js': FakeFavico });
+
 
 chai.use(sinonChai);
 

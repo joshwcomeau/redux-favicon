@@ -1,10 +1,9 @@
-import favicoIntegration from './favico-integration';
-import Favico from 'favico.js';
+const Favico = require('favico.js');
 
 
-// The middleware is kept as simple as possible. All favicon operations are
-// delegated to a function below.
-export default function(favicoOptions = {}) {
+// The middleware is kept as simple as possible.
+// All favicon operations are delegated to a function below.
+module.exports = function(favicoOptions = {}) {
   // Detect if this middleware is being used without being 'preloaded',
   // by being passed a store instead of favicoOptions
   if ( typeof favicoOptions.getState === 'function' ) {
@@ -50,7 +49,6 @@ function favicoIntegration(options = defaultFavicoOptions) {
     currentVal: 0,
 
     update(value, callback) {
-      console.log("Update called with value", value)
       if ( typeof value === 'number' ) {
         // Don't allow non-integer values
         if ( value % 1 !== 0 ) {
