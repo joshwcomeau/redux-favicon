@@ -21,6 +21,7 @@ export default function(options = defaultFavicoOptions) {
     currentVal: 0,
 
     update(value, callback) {
+      console.log("Update called with value", value)
       if ( typeof value === 'number' ) {
         // Don't allow non-integer values
         if ( value % 1 !== 0 ) {

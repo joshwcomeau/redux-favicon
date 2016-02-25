@@ -11,6 +11,7 @@ export default function(favicoOptions = {}) {
   let favicon = favicoIntegration(favicoOptions)
 
   return store => next => action => {
+    console.log("Action:", action)
     // Ignore actions that don't tweak the favico
     if ( !action.meta || typeof action.meta.favico === 'undefined' ) {
       return next(action);

@@ -3,13 +3,20 @@
 import chai, { expect }   from 'chai';
 import sinon              from 'sinon';
 import sinonChai          from 'sinon-chai';
-import Favico             from 'favico.js';
+
+// favico.js requires a DOM to exist, otherwise it throws.
+import jsdom from 'jsdom';
+global.document   = jsdom.jsdom('Hi');
+global.window     = document.defaultView;
+global.navigator  = {
+  userAgent: 'node',
+  getUserMedia: sinon.spy()
+}
 
 import faviconMiddleware  from '../src/index';
 
 chai.use(sinonChai);
 
-console.log(faviconMiddleware())
 
 describe('faviconMiddleware', () => {
   const next      = sinon.spy();
@@ -72,6 +79,8 @@ describe('faviconMiddleware', () => {
 
         expect(warnStub).to.have.been.calledOnce;
         expect(next).to.have.been.calledOnce;
+
+        console.log(warnStub.getCall(0).args)
         // TODO: Check the exact error message for 'illegal type'
       })
     })
