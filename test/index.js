@@ -3,6 +3,7 @@
 import chai, { expect }   from 'chai';
 import sinon              from 'sinon';
 import sinonChai          from 'sinon-chai';
+chai.use(sinonChai);
 
 // favico.js requires a DOM to exist, otherwise it throws.
 import jsdom from 'jsdom';
@@ -21,8 +22,6 @@ const FakeFavico = function() {
 }
 const faviconMiddleware = proxyquire('../src/index.js', { 'favico.js': FakeFavico });
 
-
-chai.use(sinonChai);
 
 
 describe('faviconMiddleware', () => {
