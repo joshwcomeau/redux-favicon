@@ -7,7 +7,12 @@ export default function(favicoOptions) {
   // Detect if this middleware is being used without being 'preloaded',
   // by being passed a store instead of favicoOptions
   if ( favicoOptions && typeof favicoOptions.getState === 'function' ) {
-    console.error('redux-favicon middleware not preloaded! \nYou need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.\n\nSee https://github.com/joshwcomeau/redux-favico/#troubleshooting')
+    console.error(`
+      redux-favicon middleware not preloaded!
+      You need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.
+
+      See https://github.com/joshwcomeau/redux-favicon#setup`
+    );
   }
 
   let favicon = favicoIntegration(favicoOptions)
@@ -52,7 +57,8 @@ function favicoIntegration(options = defaultFavicoOptions) {
             Warning: Favico not affected.
             You provided a floating-point value: ${value}.
             You need to provide an integer, or a keyword value.
-            See <INSERT LINK> for more information.
+
+            See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.
           `);
         }
 
@@ -68,7 +74,8 @@ function favicoIntegration(options = defaultFavicoOptions) {
               Warning: Favico not affected.
               You provided a string value: ${value}.
               The only strings we accept are: ${favicoEnumValues.join(', ')}.
-              See <INSERT LINK> for more information.
+
+              See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.
             `);
         }
 
@@ -83,7 +90,8 @@ function favicoIntegration(options = defaultFavicoOptions) {
           Warning: Favico provided an illegal type.
           You provided a a value of type: ${provided_type}.
           We only accept integers or strings.
-          See <INSERT LINK> for more information.
+
+          See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.
         `);
       }
 
