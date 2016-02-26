@@ -56,7 +56,7 @@ describe('faviconMiddleware', () => {
 
   describe('curried application', () => {
     it('loads the middleware with configs, returns a function', () => {
-      storeHandler = faviconMiddleware({ animation: 'fade' });
+      storeHandler = faviconMiddleware();
       expect(storeHandler).to.be.a('function')
     });
 
@@ -75,6 +75,8 @@ describe('faviconMiddleware', () => {
 
   describe('dispatching actions', () => {
     const invalidTypes = [
+      null,
+      true,
       {},
       [],
       () => {}
@@ -115,6 +117,17 @@ describe('faviconMiddleware', () => {
       expect(next).to.have.been.calledOnce;
     });
 
+    it('rounds negative integer values to 0', () => {
+      const action = { name: 'INVALID', meta: { favicon: -12 } };
+      actionHandler(action);
+
+      expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(0);
+      expect(next).to.have.been.calledOnce;
+    });
+
     it('accepts integer values', () => {
       const action = { name: 'INVALID', meta: { favicon: 4 } };
       actionHandler(action);
@@ -126,7 +139,9 @@ describe('faviconMiddleware', () => {
       expect(next).to.have.been.calledOnce;
     });
 
-    it('accepts enum string values', () => {
+
+
+    it('accepts "increment" string value', () => {
       const action = { name: 'INVALID', meta: { favicon: 'increment' } };
       actionHandler(action);
 
@@ -134,6 +149,28 @@ describe('faviconMiddleware', () => {
 
       expect(favicoStub).to.have.been.called;
       expect(favicoStub.getCall(0).args[0]).to.equal(5);
+      expect(next).to.have.been.calledOnce;
+    });
+
+    it('accepts "decrement" string value', () => {
+      const action = { name: 'INVALID', meta: { favicon: 'decrement' } };
+      actionHandler(action);
+
+      expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(4);
+      expect(next).to.have.been.calledOnce;
+    });
+
+    it('accepts "reset" string value', () => {
+      const action = { name: 'INVALID', meta: { favicon: 'reset' } };
+      actionHandler(action);
+
+      expect(warnStub).to.not.have.been.called;
+
+      expect(favicoStub).to.have.been.called;
+      expect(favicoStub.getCall(0).args[0]).to.equal(0);
       expect(next).to.have.been.calledOnce;
     });
 

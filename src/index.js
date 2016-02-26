@@ -3,10 +3,10 @@ import Favico from 'favico.js';
 
 // The middleware is kept as simple as possible.
 // All favicon operations are delegated to a function below.
-export default function(favicoOptions = {}) {
+export default function(favicoOptions) {
   // Detect if this middleware is being used without being 'preloaded',
   // by being passed a store instead of favicoOptions
-  if ( typeof favicoOptions.getState === 'function' ) {
+  if ( favicoOptions && typeof favicoOptions.getState === 'function' ) {
     console.error('redux-favicon middleware not preloaded! \nYou need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.\n\nSee https://github.com/joshwcomeau/redux-favico/#troubleshooting')
   }
 
@@ -48,13 +48,12 @@ function favicoIntegration(options = defaultFavicoOptions) {
       if ( typeof value === 'number' ) {
         // Don't allow non-integer values
         if ( value % 1 !== 0 ) {
-          const errorMessage =`
+          return callback(`
             Warning: Favico not affected.
             You provided a floating-point value: ${value}.
             You need to provide an integer, or a keyword value.
             See <INSERT LINK> for more information.
-          `;
-          return callback(errorMessage);
+          `);
         }
 
         this.currentVal = value;
@@ -65,31 +64,34 @@ function favicoIntegration(options = defaultFavicoOptions) {
           case 'decrement': this.currentVal--; break;
           case 'reset':     this.currentVal=0; break;
           default:
-            const errorMessage = `
+            return callback(`
               Warning: Favico not affected.
               You provided a string value: ${value}.
               The only strings we accept are: ${favicoEnumValues.join(', ')}.
               See <INSERT LINK> for more information.
-            `;
-            return callback(errorMessage);
+            `);
         }
 
       } else {
-        const errorMessage = `
+        // Annoyingly, istanbul won't give me 100% coverage unless all possible
+        // typeof values are checked. It is not possible for all types to make
+        // it to this check; `undefined` aborts earlier.
+        /* istanbul ignore next */
+        const provided_type = typeof value;
+
+        return callback(`
           Warning: Favico provided an illegal type.
-          You provided a a value of type: ${typeof value}.
+          You provided a a value of type: ${provided_type}.
           We only accept integers or strings.
           See <INSERT LINK> for more information.
-        `;
-        return callback(errorMessage);
+        `);
       }
 
       // Don't allow negative numbers
       this.currentVal = ( this.currentVal < 0 ) ? 0 : this.currentVal;
 
       // Set the 'badge' to be our derived value.
-      // The favico.js library will show it if it's a positive number,
-      // or hide it if it isn't.
+      // The favico.js library will show it if it's truthy, hide it if falsy.
       favico.badge(this.currentVal);
 
       return callback();
