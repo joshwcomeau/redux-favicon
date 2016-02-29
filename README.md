@@ -39,11 +39,103 @@ UMD builds are also available, for single-file usage or quick hacking in a JSbin
 
 ## Setup
 
-TODO
+Import the module into your configure-store file, pre-load it with settings, and apply it to the store:
+
+```js
+/* configure-store.js */
+
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import faviconMiddleware from 'redux-sounds';
+
+import reducer from '../reducers';
+
+// Redux Favicon accepts a configuration object. The options are explained below.
+const faviconConfig = {
+  animation:  'slide',
+  position:   'up',
+  type:       'rectangle',
+  bgColor:    '#123456',
+  textColor:  '#314159'
+};
+
+// Pre-load our middleware with our config.
+const loadedFaviconMiddleware = faviconMiddleware(faviconConfig);
+
+// Use as you would any other middleware.
+const store = createStore(reducer, applyMiddleware(loadedFaviconMiddleware));
+// (Using the condensed createStore released in Redux v3.1.0)
+```
+
+The config file is optional, but you do need to invoke the favicon middleware either way:
+
+```js
+// Note that faviconMiddleware is being invoked:
+const store = createStore(reducer, applyMiddleware( faviconMiddleware() ));
+```
+
+## Options
+
+Redux Favicon uses [Favico.js](http://lab.ejci.net/favico.js/) v0.3.10 under the hood. Favico.js offers some additional bells and whistles that are untested with this middleware, but the following options are supported:
+
+| Attribute  | Default    | Details                                                                                    |
+|------------|------------|----------------------------------------------------------------------------------------------------------|
+| bgColor    | #d00       | Badge background color                                                                                   |
+| textColor  | #fff       | Badge text color                                                                                         |
+| fontFamily | sans-serif | Text font family (Arial, Verdana, Times New Roman, serif, sans-serif,...)                                |
+| fontStyle  | bold       | Font style (normal, italic, oblique, bold, bolder, lighter, 100, 200, 300, 400, 500, 600, 700, 800, 900) |
+| type       | circle     | Badge shape (circle, rectangle)                                                                          |
+| position   | down       | Badge position (up, down, left, upleft)                                                                  |
+| animation  | slide      | Badge animation type (slide, fade, pop, popFade, none )                                                  |
 
 ## Usage
 
-TODO
+Once your store is created, dispatching actions that trigger sounds is simple.
+
+Using the convention established in the [rafScheduler Middleware example](https://github.com/rackt/redux/blob/46083e73d952feb367bf3fa4e13c1e419a224100/docs/advanced/Middleware.md#seven-examples), a new `meta` property can be attached to actions.
+
+By attaching a `favicon` property to the `meta` object, you can specify the new number you'd like to display. Several convenience strings are offered as well.
+
+Examples:
+
+```js
+// Set a new badge number.
+// Accepts any integer.
+// Sending 0 or a negative number hides the badge.
+{
+  type: UPDATE_SCORE,
+  meta: {
+    favicon: 12
+  }
+}
+
+// Increase the current favicon number by 1.
+// If there is no favicon badge currently displayed, it will be set to `1`
+{
+  type: RECEIVE_MESSAGE,
+  meta: {
+    favicon: 'increment'
+  }
+}
+
+// Decrease the current favicon number by 1.
+// If the current value is 1 or lower, this action removes the badge.
+{
+  type: RECEIVE_MESSAGE,
+  meta: {
+    favicon: 'decrement'
+  }
+}
+
+// Remove the badge
+// This is equivalent to sending a value of `0`
+{
+  type: RECEIVE_MESSAGE,
+  meta: {
+    favicon: 'reset'
+  }
+}
+
+```
 
 ## Troubleshooting
 
