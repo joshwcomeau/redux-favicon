@@ -66,12 +66,8 @@ const store = createStore(reducer, applyMiddleware(loadedFaviconMiddleware));
 // (Using the condensed createStore released in Redux v3.1.0)
 ```
 
-The config file is optional, but you do need to invoke the favicon middleware either way:
+The config file is optional, but you do need to invoke the favicon middleware either way.
 
-```js
-// Note that faviconMiddleware is being invoked:
-const store = createStore(reducer, applyMiddleware( faviconMiddleware() ));
-```
 
 ## Options
 
@@ -134,12 +130,58 @@ Examples:
     favicon: 'reset'
   }
 }
-
 ```
+
 
 ## Troubleshooting
 
-TODO
+I've done my best to make common errors communicated and explained via the console. Here are some of the errors you might encounter:
+
+```
+redux-favicon middleware not preloaded!
+You need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.
+```
+
+When passing the middleware to the store, be sure to invoke it first:
+
+```js
+// Note that faviconMiddleware is being invoked:
+const store = createStore(reducer, applyMiddleware( faviconMiddleware() ));
+//                                                                   ^^
+```
+-----
+
+```
+Warning: Favico not affected.
+You provided a floating-point value: _____.
+You need to provide an integer, or a keyword value.
+```
+
+This error is shown when the value dispatched to redux-favicon is a non-integer value. Decimals cannot be displayed in the favicon badge, only whole numbers.
+
+-----
+
+```
+Warning: Favico not affected.
+You provided a string value: ______.
+The only strings we accept are: 'increment', 'decrement', 'reset'.
+```
+
+This one is pretty self-explanatory. String values are generally disallowed, with the exception of a few handy shortcuts for specifying relative adjustments or resets.
+
+-----
+
+```
+Warning: Favico provided an illegal type.
+You provided a a value of type: ______.
+We only accept integers or strings.
+```
+
+Also pretty self-explanatory, redux-favicon does not like when you give it an array, object, function, etc.
+
+-----
+
+
 
 ## Tests
 
@@ -150,7 +192,9 @@ Using Mocha for test-running, Chai Expect for assertions, and Istanbul for test 
 
 ## Planned functionality
 
-TODO
+I don't have much planned, beyond maintenance. I could wrap additional Favico features (like dymanically specifying an image for a favicon, or using the user's webcam), but these aren't features that I personally have a need for.
+
+Do get in touch if you have ideas for ways to improve this project :)
 
 
 ## Contributions

@@ -66,13 +66,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	// All favicon operations are delegated to a function below.
 
 
-	exports.default = function () {
-	  var favicoOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
+	exports.default = function (favicoOptions) {
 	  // Detect if this middleware is being used without being 'preloaded',
 	  // by being passed a store instead of favicoOptions
-	  if (typeof favicoOptions.getState === 'function') {
-	    console.error('redux-favicon middleware not preloaded! \nYou need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.\n\nSee https://github.com/joshwcomeau/redux-favico/#troubleshooting');
+	  if (favicoOptions && typeof favicoOptions.getState === 'function') {
+	    console.error('\n      redux-favicon middleware not preloaded!\n      You need to first call reduxFavicon with its configuration to initialize it, THEN pass it to createStore.\n\n      See https://github.com/joshwcomeau/redux-favicon#setup');
 	  }
 
 	  var favicon = favicoIntegration(favicoOptions);
@@ -125,8 +123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (typeof value === 'number') {
 	        // Don't allow non-integer values
 	        if (value % 1 !== 0) {
-	          var errorMessage = '\n            Warning: Favico not affected.\n            You provided a floating-point value: ' + value + '.\n            You need to provide an integer, or a keyword value.\n            See <INSERT LINK> for more information.\n          ';
-	          return callback(errorMessage);
+	          return callback('\n            Warning: Favico not affected.\n            You provided a floating-point value: ' + value + '.\n            You need to provide an integer, or a keyword value.\n\n            See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.\n          ');
 	        }
 
 	        this.currentVal = value;
@@ -139,20 +136,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	          case 'reset':
 	            this.currentVal = 0;break;
 	          default:
-	            var errorMessage = '\n              Warning: Favico not affected.\n              You provided a string value: ' + value + '.\n              The only strings we accept are: ' + favicoEnumValues.join(', ') + '.\n              See <INSERT LINK> for more information.\n            ';
-	            return callback(errorMessage);
+	            return callback('\n              Warning: Favico not affected.\n              You provided a string value: ' + value + '.\n              The only strings we accept are: ' + favicoEnumValues.join(', ') + '.\n\n              See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.\n            ');
 	        }
 	      } else {
-	        var errorMessage = '\n          Warning: Favico provided an illegal type.\n          You provided a a value of type: ' + (typeof value === 'undefined' ? 'undefined' : _typeof(value)) + '.\n          We only accept integers or strings.\n          See <INSERT LINK> for more information.\n        ';
-	        return callback(errorMessage);
+	        // Annoyingly, istanbul won't give me 100% coverage unless all possible
+	        // typeof values are checked. It is not possible for all types to make
+	        // it to this check; `undefined` aborts earlier.
+	        /* istanbul ignore next */
+	        var provided_type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+
+	        return callback('\n          Warning: Favico provided an illegal type.\n          You provided a a value of type: ' + provided_type + '.\n          We only accept integers or strings.\n\n          See https://github.com/joshwcomeau/redux-favicon#troubleshooting for more information.\n        ');
 	      }
 
 	      // Don't allow negative numbers
 	      this.currentVal = this.currentVal < 0 ? 0 : this.currentVal;
 
 	      // Set the 'badge' to be our derived value.
-	      // The favico.js library will show it if it's a positive number,
-	      // or hide it if it isn't.
+	      // The favico.js library will show it if it's truthy, hide it if falsy.
 	      favico.badge(this.currentVal);
 
 	      return callback();
@@ -464,7 +464,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			 * Set badge
 			 */
 			var badge = function (number, opts) {
-				console.log("\n\n\nI SHOULD NEVER BE CALLED\n\n\n")
 				opts = ((typeof opts) === 'string' ? {
 					animation: opts
 				} : opts) || {};
