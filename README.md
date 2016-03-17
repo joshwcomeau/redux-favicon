@@ -3,6 +3,7 @@ Redux Favicon
 
 [![build status](https://img.shields.io/travis/joshwcomeau/redux-favicon/master.svg?style=flat-square)](https://travis-ci.org/joshwcomeau/redux-favicon)
 [![npm version](https://img.shields.io/npm/v/redux-favicon.svg?style=flat-square)](https://www.npmjs.com/package/redux-favicon)
+[![Coverage Status](https://coveralls.io/repos/github/joshwcomeau/redux-favicon/badge.svg?branch=master)](https://coveralls.io/github/joshwcomeau/redux-favicon?branch=master)
 
 
 Redux [middleware](http://rackt.org/redux/docs/advanced/Middleware.html) that lets you display notification badges in the favicon:
@@ -192,7 +193,7 @@ Using Mocha for test-running, Chai Expect for assertions, and Istanbul for test 
 
 ## Planned functionality
 
-I don't have much planned, beyond maintenance. I could wrap additional Favico features (like dymanically specifying an image for a favicon, or using the user's webcam), but these aren't features that I personally have a need for.
+I don't have much planned, beyond maintenance. I could wrap additional Favico features (like dynamically specifying an image for a favicon, or using the user's webcam), but these aren't features that I personally have a need for.
 
 Do get in touch if you have ideas for ways to improve this project :)
 
