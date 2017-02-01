@@ -56,6 +56,40 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	// if we load in a windowless environment (tests, SSR...), fall back to
+	// an empty middleware.
+	if (typeof window === 'undefined') {
+	  module.exports = __webpack_require__(1);
+	} else {
+	  module.exports = __webpack_require__(2);
+	}
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function () {
+	  return function (next) {
+	    return function (action) {
+	      next(action);
+	    };
+	  };
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -93,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
-	var _favico = __webpack_require__(1);
+	var _favico = __webpack_require__(3);
 
 	var _favico2 = _interopRequireDefault(_favico);
 
@@ -162,7 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 1 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
