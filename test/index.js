@@ -20,7 +20,7 @@ let favicoStub = sinon.stub();
 const FakeFavico = function() {
   this.badge = favicoStub
 }
-const faviconMiddleware = proxyquire('../src/index.js', { 'favico.js': FakeFavico });
+const faviconMiddleware = proxyquire('../src/favicon-middleware.js', { 'favico.js': FakeFavico });
 
 
 
