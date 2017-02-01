@@ -60,7 +60,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	// The middleware is kept as simple as possible.
 	// All favicon operations are delegated to a function below.
@@ -104,7 +104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// This integration communicates directly with Favico.js to set the badge.
 	function favicoIntegration() {
-	  var options = arguments.length <= 0 || arguments[0] === undefined ? defaultFavicoOptions : arguments[0];
+	  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultFavicoOptions;
 
 	  // Create a new Favico integration.
 	  // Initially this was going to be a singleton object, but I realized there
