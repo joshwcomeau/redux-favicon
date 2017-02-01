@@ -46,7 +46,7 @@ Import the module into your configure-store file, pre-load it with settings, and
 /* configure-store.js */
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import faviconMiddleware from 'redux-sounds';
+import faviconMiddleware from 'redux-favicon';
 
 import reducer from '../reducers';
 
