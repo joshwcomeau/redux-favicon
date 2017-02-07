@@ -75,9 +75,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	exports.default = function () {
-	  return function (next) {
-	    return function (action) {
-	      next(action);
+	  return function () {
+	    return function (next) {
+	      return function (action) {
+	        next(action);
+	      };
 	    };
 	  };
 	};
